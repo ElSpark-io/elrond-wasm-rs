@@ -1,6 +1,6 @@
 use crate::{
     num_bigint::BigUint,
-    world_mock::{AccountData, AccountEsdt, BlockchainMock},
+    world_mock::{AccountData, AccountEsdt, BlockchainMock}, testing_framework::vm::VM,
 };
 use alloc::vec::Vec;
 use core::cell::RefCell;
@@ -26,11 +26,13 @@ pub struct TxContext {
     pub tx_result_cell: RefCell<TxResult>,
     pub b_rng: RefCell<BlockchainRng>,
     pub printed_messages: RefCell<Vec<String>>,
+    pub vm: Rc<VM>,
 }
 
 impl TxContext {
     pub fn new(tx_input: TxInput, tx_cache: TxCache) -> Self {
         let b_rng = RefCell::new(BlockchainRng::new(&tx_input, &tx_cache));
+        let rc_vm = Rc::clone(&tx_cache.blockchain_ref().vm);
         TxContext {
             tx_input_box: Box::new(tx_input),
             tx_cache: Rc::new(tx_cache),
@@ -40,11 +42,13 @@ impl TxContext {
             tx_result_cell: RefCell::new(TxResult::empty()),
             b_rng,
             printed_messages: RefCell::new(Vec::new()),
+            vm: rc_vm,
         }
     }
 
     pub fn dummy() -> Self {
         let tx_cache = TxCache::new(Rc::new(BlockchainMock::new()));
+        let rc_vm = Rc::clone(&tx_cache.blockchain_ref().vm);
         let contract_address = Address::from(&[b'c'; 32]);
         tx_cache.insert_account(AccountData {
             address: contract_address.clone(),
@@ -75,6 +79,7 @@ impl TxContext {
             tx_result_cell: RefCell::new(TxResult::empty()),
             b_rng,
             printed_messages: RefCell::new(Vec::new()),
+            vm: rc_vm,
         }
     }
 

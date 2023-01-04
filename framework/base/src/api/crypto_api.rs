@@ -21,26 +21,26 @@ pub trait CryptoApi: ManagedTypeApi {
 }
 
 pub trait CryptoApiImpl: ManagedTypeApiImpl {
-    fn sha256_legacy(&self, data: &[u8]) -> [u8; SHA256_RESULT_LEN];
+    fn sha256_legacy(&mut self, data: &[u8]) -> [u8; SHA256_RESULT_LEN];
 
     fn sha256_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     );
 
-    fn keccak256_legacy(&self, data: &[u8]) -> [u8; KECCAK256_RESULT_LEN];
+    fn keccak256_legacy(&mut self, data: &[u8]) -> [u8; KECCAK256_RESULT_LEN];
 
     fn keccak256_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     );
 
-    fn ripemd160_legacy(&self, data: &[u8]) -> [u8; RIPEMD_RESULT_LEN];
+    fn ripemd160_legacy(&mut self, data: &[u8]) -> [u8; RIPEMD_RESULT_LEN];
 
     fn ripemd160_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     );
@@ -57,7 +57,7 @@ pub trait CryptoApiImpl: ManagedTypeApiImpl {
     fn verify_ed25519_legacy(&self, key: &[u8], message: &[u8], signature: &[u8]) -> bool;
 
     fn verify_ed25519_managed(
-        &self,
+        &mut self,
         key: Self::ManagedBufferHandle,
         message: Self::ManagedBufferHandle,
         signature: Self::ManagedBufferHandle,

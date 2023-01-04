@@ -56,7 +56,7 @@ impl ManagedBufferApi for crate::api::VmApiImpl {
         unsafe { mBufferGetLength(handle) as usize }
     }
 
-    fn mb_to_boxed_bytes(&self, handle: Self::ManagedBufferHandle) -> BoxedBytes {
+    fn mb_to_boxed_bytes(&mut self, handle: Self::ManagedBufferHandle) -> BoxedBytes {
         unsafe {
             let len = mBufferGetLength(handle);
             let mut res = BoxedBytes::allocate(len as usize);
@@ -112,7 +112,7 @@ impl ManagedBufferApi for crate::api::VmApiImpl {
     }
 
     fn mb_copy_to_slice_pad_right(
-        &self,
+        &mut self,
         handle: Self::ManagedBufferHandle,
         destination: &mut [u8],
     ) {

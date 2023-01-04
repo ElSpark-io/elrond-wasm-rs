@@ -17,7 +17,7 @@ pub trait ManagedBufferApi: HandleTypeInfo {
 
     fn mb_len(&self, handle: Self::ManagedBufferHandle) -> usize;
 
-    fn mb_to_boxed_bytes(&self, handle: Self::ManagedBufferHandle) -> BoxedBytes;
+    fn mb_to_boxed_bytes(&mut self, handle: Self::ManagedBufferHandle) -> BoxedBytes;
 
     /// TODO: investigate the impact of using `Result<(), ()>` on the wasm output.
     fn mb_load_slice(
@@ -36,7 +36,7 @@ pub trait ManagedBufferApi: HandleTypeInfo {
         dest_handle: Self::ManagedBufferHandle,
     ) -> Result<(), InvalidSliceError>;
 
-    fn mb_copy_to_slice_pad_right(&self, handle: Self::ManagedBufferHandle, destination: &mut [u8]);
+    fn mb_copy_to_slice_pad_right(&mut self, handle: Self::ManagedBufferHandle, destination: &mut [u8]);
 
     fn mb_overwrite(&self, handle: Self::ManagedBufferHandle, value: &[u8]);
 

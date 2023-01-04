@@ -202,7 +202,7 @@ impl BlockchainApiImpl for DebugApi {
     }
 
     fn check_esdt_frozen(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
         _nonce: u64,

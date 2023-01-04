@@ -12,7 +12,7 @@ impl ManagedTypeApi for UncallableApi {
 
 impl ManagedTypeApiImpl for UncallableApi {
     fn mb_to_big_int_unsigned(
-        &self,
+        &mut self,
         _buffer_handle: Self::ManagedBufferHandle,
         _dest: Self::BigIntHandle,
     ) {
@@ -20,7 +20,7 @@ impl ManagedTypeApiImpl for UncallableApi {
     }
 
     fn mb_to_big_int_signed(
-        &self,
+        &mut self,
         _buffer_handle: Self::ManagedBufferHandle,
         _dest: Self::BigIntHandle,
     ) {
@@ -28,7 +28,7 @@ impl ManagedTypeApiImpl for UncallableApi {
     }
 
     fn mb_from_big_int_unsigned(
-        &self,
+        &mut self,
         _big_int_handle: Self::BigIntHandle,
         _dest: Self::ManagedBufferHandle,
     ) {
@@ -36,7 +36,7 @@ impl ManagedTypeApiImpl for UncallableApi {
     }
 
     fn mb_from_big_int_signed(
-        &self,
+        &mut self,
         _big_int_handle: Self::BigIntHandle,
         _dest: Self::ManagedBufferHandle,
     ) {

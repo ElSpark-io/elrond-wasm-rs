@@ -23,7 +23,7 @@ impl ManagedTypeApi for VmApiImpl {
 impl ManagedTypeApiImpl for VmApiImpl {
     #[inline]
     fn mb_to_big_int_unsigned(
-        &self,
+        &mut self,
         buffer_handle: Self::ManagedBufferHandle,
         big_int_handle: Self::BigIntHandle,
     ) {
@@ -34,7 +34,7 @@ impl ManagedTypeApiImpl for VmApiImpl {
 
     #[inline]
     fn mb_to_big_int_signed(
-        &self,
+        &mut self,
         buffer_handle: Self::ManagedBufferHandle,
         big_int_handle: Self::BigIntHandle,
     ) {
@@ -45,7 +45,7 @@ impl ManagedTypeApiImpl for VmApiImpl {
 
     #[inline]
     fn mb_from_big_int_unsigned(
-        &self,
+        &mut self,
         big_int_handle: Self::BigIntHandle,
         buffer_handle: Self::ManagedBufferHandle,
     ) {
@@ -56,7 +56,7 @@ impl ManagedTypeApiImpl for VmApiImpl {
 
     #[inline]
     fn mb_from_big_int_signed(
-        &self,
+        &mut self,
         big_int_handle: Self::BigIntHandle,
         buffer_handle: Self::ManagedBufferHandle,
     ) {

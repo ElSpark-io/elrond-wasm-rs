@@ -140,7 +140,7 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
     ) -> EsdtTokenData<M>;
 
     fn check_esdt_frozen(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
         nonce: u64,

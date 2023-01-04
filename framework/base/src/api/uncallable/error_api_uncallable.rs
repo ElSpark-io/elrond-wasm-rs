@@ -13,7 +13,7 @@ impl ErrorApiImpl for super::UncallableApi {
         unreachable!()
     }
 
-    fn signal_error_from_buffer(&self, _message_handle: Self::ManagedBufferHandle) -> ! {
+    fn signal_error_from_buffer(&mut self, _message_handle: Self::ManagedBufferHandle) -> ! {
         unreachable!()
     }
 }

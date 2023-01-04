@@ -14,11 +14,11 @@ impl BigIntApi for super::UncallableApi {
         unreachable!()
     }
 
-    fn bi_unsigned_byte_length(&self, _x: Self::BigIntHandle) -> usize {
+    fn bi_unsigned_byte_length(&mut self, _x: Self::BigIntHandle) -> usize {
         unreachable!()
     }
 
-    fn bi_get_unsigned_bytes(&self, _reference: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_unsigned_bytes(&mut self, _reference: Self::BigIntHandle) -> BoxedBytes {
         unreachable!()
     }
 
@@ -26,11 +26,11 @@ impl BigIntApi for super::UncallableApi {
         unreachable!()
     }
 
-    fn bi_signed_byte_length(&self, _x: Self::BigIntHandle) -> usize {
+    fn bi_signed_byte_length(&mut self, _x: Self::BigIntHandle) -> usize {
         unreachable!()
     }
 
-    fn bi_get_signed_bytes(&self, _reference: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_signed_bytes(&mut self, _reference: Self::BigIntHandle) -> BoxedBytes {
         unreachable!()
     }
 

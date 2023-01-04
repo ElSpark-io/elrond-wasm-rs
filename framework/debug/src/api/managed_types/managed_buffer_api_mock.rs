@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::DebugApi;
 use mx_sc::{
     api::{HandleTypeInfo, InvalidSliceError, ManagedBufferApi},
@@ -66,8 +68,18 @@ impl ManagedBufferApi for DebugApi {
         data.len()
     }
 
-    fn mb_to_boxed_bytes(&self, handle: Self::ManagedBufferHandle) -> BoxedBytes {
+    fn mb_to_boxed_bytes(&mut self, handle: Self::ManagedBufferHandle) -> BoxedBytes {
         let data = self.mb_get(handle);
+
+        // memstore
+        unsafe {
+            let data_length = data.len();
+            let res = BoxedBytes::allocate(data_length as usize);
+            let self_mut = Rc::get_mut(&mut self.0).unwrap();
+            let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+            vm.mem_store(res.as_ptr() as u32, data_length as u32).unwrap();
+        }
+
         data.into()
     }
 
@@ -103,7 +115,7 @@ impl ManagedBufferApi for DebugApi {
     }
 
     fn mb_copy_to_slice_pad_right(
-        &self,
+        &mut self,
         handle: Self::ManagedBufferHandle,
         destination: &mut [u8],
     ) {

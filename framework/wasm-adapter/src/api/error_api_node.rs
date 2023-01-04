@@ -21,7 +21,7 @@ impl ErrorApiImpl for VmApiImpl {
     }
 
     #[inline(always)]
-    fn signal_error_from_buffer(&self, message_handle: Self::ManagedBufferHandle) -> ! {
+    fn signal_error_from_buffer(&mut self, message_handle: Self::ManagedBufferHandle) -> ! {
         unsafe { managedSignalError(message_handle) }
     }
 }

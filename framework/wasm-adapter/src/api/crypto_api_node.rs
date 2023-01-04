@@ -83,7 +83,7 @@ impl CryptoApi for VmApiImpl {
 
 impl CryptoApiImpl for VmApiImpl {
     #[inline]
-    fn sha256_legacy(&self, data: &[u8]) -> [u8; 32] {
+    fn sha256_legacy(&mut self, data: &[u8]) -> [u8; 32] {
         unsafe {
             let mut res = [0u8; 32];
             sha256(data.as_ptr(), data.len() as i32, res.as_mut_ptr());
@@ -92,7 +92,7 @@ impl CryptoApiImpl for VmApiImpl {
     }
 
     fn sha256_managed(
-        &self,
+        &mut self,
         result_handle: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     ) {
@@ -102,7 +102,7 @@ impl CryptoApiImpl for VmApiImpl {
     }
 
     #[inline]
-    fn keccak256_legacy(&self, data: &[u8]) -> [u8; 32] {
+    fn keccak256_legacy(&mut self, data: &[u8]) -> [u8; 32] {
         unsafe {
             let mut res = [0u8; 32];
             keccak256(data.as_ptr(), data.len() as i32, res.as_mut_ptr());
@@ -111,7 +111,7 @@ impl CryptoApiImpl for VmApiImpl {
     }
 
     fn keccak256_managed(
-        &self,
+        &mut self,
         result_handle: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     ) {
@@ -121,7 +121,7 @@ impl CryptoApiImpl for VmApiImpl {
     }
 
     #[inline]
-    fn ripemd160_legacy(&self, data: &[u8]) -> [u8; 20] {
+    fn ripemd160_legacy(&mut self, data: &[u8]) -> [u8; 20] {
         unsafe {
             let mut res = [0u8; 20];
             ripemd160(data.as_ptr(), data.len() as i32, res.as_mut_ptr());
@@ -131,7 +131,7 @@ impl CryptoApiImpl for VmApiImpl {
 
     #[inline]
     fn ripemd160_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     ) {
@@ -177,7 +177,7 @@ impl CryptoApiImpl for VmApiImpl {
 
     #[inline]
     fn verify_ed25519_managed(
-        &self,
+        &mut self,
         key: Self::ManagedBufferHandle,
         message: Self::ManagedBufferHandle,
         signature: Self::ManagedBufferHandle,

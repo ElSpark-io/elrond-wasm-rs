@@ -132,7 +132,7 @@ impl BlockchainApiImpl for UncallableApi {
     }
 
     fn check_esdt_frozen(
-        &self,
+        &mut self,
         _address_handle: Self::ManagedBufferHandle,
         _token_id_handle: Self::ManagedBufferHandle,
         _nonce: u64,

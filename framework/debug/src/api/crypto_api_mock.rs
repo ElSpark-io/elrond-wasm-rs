@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::DebugApi;
 use ed25519_dalek::*;
 use mx_sc::{
@@ -19,46 +21,64 @@ impl CryptoApi for DebugApi {
 }
 
 impl CryptoApiImpl for DebugApi {
-    fn sha256_legacy(&self, data: &[u8]) -> [u8; SHA256_RESULT_LEN] {
+    fn sha256_legacy(&mut self, data: &[u8]) -> [u8; SHA256_RESULT_LEN] {
+        // memstore
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+
+        // TODO: check offset is 0
+        // result of sha256 is 32 byte
+        vm.mem_store(0, 32).unwrap();
+
         let mut hasher = Sha256::new();
         hasher.update(data);
         hasher.finalize().into()
     }
 
     fn sha256_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     ) {
         // default implementation used in debugger
         // the VM has a dedicated hook
-        let result_bytes = self.sha256_legacy(self.mb_to_boxed_bytes(data_handle).as_slice());
+        let x = self.mb_to_boxed_bytes(data_handle);
+        let result_bytes = self.sha256_legacy(x.as_slice());
         self.mb_overwrite(dest, &result_bytes[..]);
     }
 
-    fn keccak256_legacy(&self, data: &[u8]) -> [u8; KECCAK256_RESULT_LEN] {
+    fn keccak256_legacy(&mut self, data: &[u8]) -> [u8; KECCAK256_RESULT_LEN] {
+        // memstore
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+
+        // TODO: check offset is 0
+        // result of sha256 is 32 byte
+        vm.mem_store(0, 32).unwrap();
+
         let mut hasher = Keccak256::new();
         hasher.update(data);
         hasher.finalize().into()
     }
 
     fn keccak256_managed(
-        &self,
+        &mut self,
         dest: Self::ManagedBufferHandle,
         data_handle: Self::ManagedBufferHandle,
     ) {
         // default implementation used in debugger
         // the VM has a dedicated hook
-        let result_bytes = self.keccak256_legacy(self.mb_to_boxed_bytes(data_handle).as_slice());
+        let x = self.mb_to_boxed_bytes(data_handle);
+        let result_bytes = self.keccak256_legacy(x.as_slice());
         self.mb_overwrite(dest, &result_bytes[..]);
     }
 
-    fn ripemd160_legacy(&self, _data: &[u8]) -> [u8; RIPEMD_RESULT_LEN] {
+    fn ripemd160_legacy(&mut self, _data: &[u8]) -> [u8; RIPEMD_RESULT_LEN] {
         panic!("ripemd160 not implemented yet!")
     }
 
     fn ripemd160_managed(
-        &self,
+        &mut self,
         _dest: Self::ManagedBufferHandle,
         _data_handle: Self::ManagedBufferHandle,
     ) {
@@ -93,15 +113,18 @@ impl CryptoApiImpl for DebugApi {
     }
 
     fn verify_ed25519_managed(
-        &self,
+        &mut self,
         key: Self::ManagedBufferHandle,
         message: Self::ManagedBufferHandle,
         signature: Self::ManagedBufferHandle,
     ) -> bool {
+        let key = self.mb_to_boxed_bytes(key);
+        let message = self.mb_to_boxed_bytes(message);
+        let signature = self.mb_to_boxed_bytes(signature);
         self.verify_ed25519_legacy(
-            self.mb_to_boxed_bytes(key).as_slice(),
-            self.mb_to_boxed_bytes(message).as_slice(),
-            self.mb_to_boxed_bytes(signature).as_slice(),
+            key.as_slice(),
+            message.as_slice(),
+            signature.as_slice(),
         )
     }
 

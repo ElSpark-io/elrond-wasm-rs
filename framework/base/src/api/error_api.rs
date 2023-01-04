@@ -15,7 +15,7 @@ pub trait ErrorApi: HandleTypeInfo {
 pub trait ErrorApiImpl: HandleTypeInfo {
     fn signal_error(&self, message: &[u8]) -> !;
 
-    fn signal_error_from_buffer(&self, message_handle: Self::ManagedBufferHandle) -> !;
+    fn signal_error_from_buffer(&mut self, message_handle: Self::ManagedBufferHandle) -> !;
 }
 
 /// An error handler that simply panics whenever `signal_error` is called.
@@ -31,7 +31,7 @@ impl ErrorApiImpl for PanickingErrorApiImpl {
         )
     }
 
-    fn signal_error_from_buffer(&self, _message_handle: Self::ManagedBufferHandle) -> ! {
+    fn signal_error_from_buffer(&mut self, _message_handle: Self::ManagedBufferHandle) -> ! {
         panic!("PanickingErrorApi panicked via signal_error_from_buffer")
     }
 }

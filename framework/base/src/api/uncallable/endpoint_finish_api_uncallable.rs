@@ -11,27 +11,27 @@ impl EndpointFinishApi for UncallableApi {
 }
 
 impl EndpointFinishApiImpl for UncallableApi {
-    fn finish_slice_u8(&self, _slice: &[u8]) {
+    fn finish_slice_u8(&mut self, _slice: &[u8]) {
         unreachable!()
     }
 
-    fn finish_big_int_raw(&self, _handle: Self::BigIntHandle) {
+    fn finish_big_int_raw(&mut self, _handle: Self::BigIntHandle) {
         unreachable!()
     }
 
-    fn finish_big_uint_raw(&self, _handle: Self::BigIntHandle) {
+    fn finish_big_uint_raw(&mut self, _handle: Self::BigIntHandle) {
         unreachable!()
     }
 
-    fn finish_managed_buffer_raw(&self, _handle: Self::ManagedBufferHandle) {
+    fn finish_managed_buffer_raw(&mut self, _handle: Self::ManagedBufferHandle) {
         unreachable!()
     }
 
-    fn finish_u64(&self, _value: u64) {
+    fn finish_u64(&mut self, _value: u64) {
         unreachable!()
     }
 
-    fn finish_i64(&self, _value: i64) {
+    fn finish_i64(&mut self, _value: i64) {
         unreachable!()
     }
 }

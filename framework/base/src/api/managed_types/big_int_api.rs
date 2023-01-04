@@ -20,12 +20,12 @@ pub trait BigIntApi: HandleTypeInfo {
     }
 
     fn bi_set_int64(&self, destination: Self::BigIntHandle, value: i64);
-    fn bi_unsigned_byte_length(&self, handle: Self::BigIntHandle) -> usize;
-    fn bi_get_unsigned_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes;
+    fn bi_unsigned_byte_length(&mut self, handle: Self::BigIntHandle) -> usize;
+    fn bi_get_unsigned_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes;
     fn bi_set_unsigned_bytes(&self, destination: Self::BigIntHandle, bytes: &[u8]);
 
-    fn bi_signed_byte_length(&self, handle: Self::BigIntHandle) -> usize;
-    fn bi_get_signed_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes;
+    fn bi_signed_byte_length(&mut self, handle: Self::BigIntHandle) -> usize;
+    fn bi_get_signed_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes;
     fn bi_set_signed_bytes(&self, destination: Self::BigIntHandle, bytes: &[u8]);
 
     fn bi_to_i64(&self, handle: Self::BigIntHandle) -> Option<i64>;

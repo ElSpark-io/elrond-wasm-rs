@@ -13,36 +13,36 @@ impl CryptoApi for UncallableApi {
 }
 
 impl CryptoApiImpl for UncallableApi {
-    fn sha256_legacy(&self, _data: &[u8]) -> [u8; SHA256_RESULT_LEN] {
+    fn sha256_legacy(&mut self, _data: &[u8]) -> [u8; SHA256_RESULT_LEN] {
         unreachable!()
     }
 
     fn sha256_managed(
-        &self,
+        &mut self,
         _dest: Self::ManagedBufferHandle,
         _data_handle: Self::ManagedBufferHandle,
     ) {
         unreachable!()
     }
 
-    fn keccak256_legacy(&self, _data: &[u8]) -> [u8; KECCAK256_RESULT_LEN] {
+    fn keccak256_legacy(&mut self, _data: &[u8]) -> [u8; KECCAK256_RESULT_LEN] {
         unreachable!()
     }
 
     fn keccak256_managed(
-        &self,
+        &mut self,
         _dest: Self::ManagedBufferHandle,
         _data_handle: Self::ManagedBufferHandle,
     ) {
         unreachable!()
     }
 
-    fn ripemd160_legacy(&self, _data: &[u8]) -> [u8; RIPEMD_RESULT_LEN] {
+    fn ripemd160_legacy(&mut self, _data: &[u8]) -> [u8; RIPEMD_RESULT_LEN] {
         unreachable!()
     }
 
     fn ripemd160_managed(
-        &self,
+        &mut self,
         _dest: Self::ManagedBufferHandle,
         _data_handle: Self::ManagedBufferHandle,
     ) {
@@ -67,7 +67,7 @@ impl CryptoApiImpl for UncallableApi {
     }
 
     fn verify_ed25519_managed(
-        &self,
+        &mut self,
         _key: Self::ManagedBufferHandle,
         _message: Self::ManagedBufferHandle,
         _signature: Self::ManagedBufferHandle,

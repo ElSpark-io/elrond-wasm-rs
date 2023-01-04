@@ -10,7 +10,7 @@ use mx_sc::{
 };
 use num_bigint::BigInt;
 use num_traits::{pow, sign::Signed, Zero};
-use std::convert::TryInto;
+use std::{convert::TryInto, rc::Rc};
 
 use super::managed_type_util::big_int_to_i64;
 
@@ -99,12 +99,18 @@ impl BigIntApi for DebugApi {
         self.bi_overwrite(destination, num_bigint::BigInt::from(value))
     }
 
-    fn bi_unsigned_byte_length(&self, handle: Self::BigIntHandle) -> usize {
+    fn bi_unsigned_byte_length(&mut self, handle: Self::BigIntHandle) -> usize {
         self.bi_get_unsigned_bytes(handle).len()
     }
 
-    fn bi_get_unsigned_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_unsigned_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes {
         let bi = self.bi_get(handle);
+
+        let byte_length = bi.to_bytes_be().1.len() as u32;
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(byte_length, byte_length).unwrap();
+
         if bi.is_zero() {
             BoxedBytes::empty()
         } else {
@@ -118,12 +124,18 @@ impl BigIntApi for DebugApi {
         self.bi_overwrite(dest, result);
     }
 
-    fn bi_signed_byte_length(&self, handle: Self::BigIntHandle) -> usize {
+    fn bi_signed_byte_length(&mut self, handle: Self::BigIntHandle) -> usize {
         self.bi_get_signed_bytes(handle).len()
     }
 
-    fn bi_get_signed_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_signed_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes {
         let bi = self.bi_get(handle);
+
+        let byte_length = bi.to_signed_bytes_be().len() as u32;
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(byte_length, byte_length).unwrap();
+
         if bi.is_zero() {
             BoxedBytes::empty()
         } else {

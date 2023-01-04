@@ -48,7 +48,7 @@ impl<A: VMApi> StorageReadApiImpl for ExternalViewApi<A> {
         self.load_external_view_target_key_handle();
     }
 
-    fn storage_load_len(&self, key: &[u8]) -> usize {
+    fn storage_load_len(&mut self, key: &[u8]) -> usize {
         let mbuf_temp_1: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_1);
         A::managed_type_impl().mb_overwrite(mbuf_temp_1.clone(), key);
         let mbuf_temp_2: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_2);
@@ -56,7 +56,7 @@ impl<A: VMApi> StorageReadApiImpl for ExternalViewApi<A> {
         A::managed_type_impl().mb_len(mbuf_temp_2)
     }
 
-    fn storage_load_to_heap(&self, key: &[u8]) -> Box<[u8]> {
+    fn storage_load_to_heap(&mut self, key: &[u8]) -> Box<[u8]> {
         let mbuf_temp_1: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_1);
         A::managed_type_impl().mb_overwrite(mbuf_temp_1.clone(), key);
         let mbuf_temp_2: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_2);
@@ -66,7 +66,7 @@ impl<A: VMApi> StorageReadApiImpl for ExternalViewApi<A> {
             .into_box()
     }
 
-    fn storage_load_big_uint_raw(&self, key: &[u8], dest: Self::BigIntHandle) {
+    fn storage_load_big_uint_raw(&mut self, key: &[u8], dest: Self::BigIntHandle) {
         let mbuf_temp_1: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_1);
         A::managed_type_impl().mb_overwrite(mbuf_temp_1.clone(), key);
         let mbuf_temp_2: A::ManagedBufferHandle = use_raw_handle(const_handles::MBUF_TEMPORARY_2);
@@ -75,7 +75,7 @@ impl<A: VMApi> StorageReadApiImpl for ExternalViewApi<A> {
     }
 
     fn storage_load_managed_buffer_raw(
-        &self,
+        &mut self,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,
     ) {
@@ -89,7 +89,7 @@ impl<A: VMApi> StorageReadApiImpl for ExternalViewApi<A> {
     }
 
     fn storage_load_from_address(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,

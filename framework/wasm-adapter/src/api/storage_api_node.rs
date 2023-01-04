@@ -37,11 +37,11 @@ impl StorageReadApi for VmApiImpl {
 
 impl StorageReadApiImpl for VmApiImpl {
     #[inline]
-    fn storage_load_len(&self, key: &[u8]) -> usize {
+    fn storage_load_len(&mut self, key: &[u8]) -> usize {
         unsafe { storageLoadLength(key.as_ref().as_ptr(), key.len() as i32) as usize }
     }
 
-    fn storage_load_to_heap(&self, key: &[u8]) -> Box<[u8]> {
+    fn storage_load_to_heap(&mut self, key: &[u8]) -> Box<[u8]> {
         let len = self.storage_load_len(key);
         unsafe {
             let mut res = BoxedBytes::allocate(len);
@@ -53,7 +53,7 @@ impl StorageReadApiImpl for VmApiImpl {
     }
 
     #[inline]
-    fn storage_load_big_uint_raw(&self, key: &[u8], dest: Self::ManagedBufferHandle) {
+    fn storage_load_big_uint_raw(&mut self, key: &[u8], dest: Self::ManagedBufferHandle) {
         unsafe {
             bigIntStorageLoadUnsigned(key.as_ref().as_ptr(), key.len() as i32, dest);
         }
@@ -61,7 +61,7 @@ impl StorageReadApiImpl for VmApiImpl {
 
     #[inline]
     fn storage_load_managed_buffer_raw(
-        &self,
+        &mut self,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,
     ) {
@@ -72,7 +72,7 @@ impl StorageReadApiImpl for VmApiImpl {
 
     #[inline]
     fn storage_load_from_address(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,
@@ -105,14 +105,14 @@ impl StorageWriteApiImpl for VmApiImpl {
     }
 
     #[inline]
-    fn storage_store_big_uint_raw(&self, key: &[u8], value_handle: Self::BigIntHandle) {
+    fn storage_store_big_uint_raw(&mut self, key: &[u8], value_handle: Self::BigIntHandle) {
         unsafe {
             bigIntStorageStoreUnsigned(key.as_ref().as_ptr(), key.len() as i32, value_handle);
         }
     }
 
     fn storage_store_managed_buffer_raw(
-        &self,
+        &mut self,
         key_handle: Self::ManagedBufferHandle,
         value_handle: Self::ManagedBufferHandle,
     ) {
@@ -121,7 +121,7 @@ impl StorageWriteApiImpl for VmApiImpl {
         }
     }
 
-    fn storage_store_managed_buffer_clear(&self, key_handle: Self::ManagedBufferHandle) {
+    fn storage_store_managed_buffer_clear(&mut self, key_handle: Self::ManagedBufferHandle) {
         unsafe {
             // TODO: this will no longer be necessay once the ("no managed buffer under the given handle" is removed from VM
             let _ = mBufferSetBytes(const_handles::MBUF_CONST_EMPTY, core::ptr::null(), 0);

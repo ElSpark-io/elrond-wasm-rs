@@ -27,22 +27,22 @@ impl DebugApi {
 }
 
 impl StorageReadApiImpl for DebugApi {
-    fn storage_load_len(&self, key: &[u8]) -> usize {
+    fn storage_load_len(&mut self, key: &[u8]) -> usize {
         self.storage_load_vec_u8(key).len()
     }
 
-    fn storage_load_to_heap(&self, key: &[u8]) -> Box<[u8]> {
+    fn storage_load_to_heap(&mut self, key: &[u8]) -> Box<[u8]> {
         self.storage_load_vec_u8(key).into_boxed_slice()
     }
 
-    fn storage_load_big_uint_raw(&self, key: &[u8], dest: Self::ManagedBufferHandle) {
+    fn storage_load_big_uint_raw(&mut self, key: &[u8], dest: Self::ManagedBufferHandle) {
         let bytes = self.storage_load_vec_u8(key);
         let bi = BigInt::from_bytes_be(Sign::Plus, bytes.as_slice());
         self.bi_overwrite(dest, bi);
     }
 
     fn storage_load_managed_buffer_raw(
-        &self,
+        &mut self,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,
     ) {
@@ -52,7 +52,7 @@ impl StorageReadApiImpl for DebugApi {
     }
 
     fn storage_load_from_address(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         key_handle: Self::ManagedBufferHandle,
         dest: Self::ManagedBufferHandle,
@@ -93,12 +93,13 @@ impl StorageWriteApiImpl for DebugApi {
         });
     }
 
-    fn storage_store_big_uint_raw(&self, key: &[u8], handle: Self::BigIntHandle) {
-        self.storage_store_slice_u8(key, self.bi_get_signed_bytes(handle).as_slice());
+    fn storage_store_big_uint_raw(&mut self, key: &[u8], handle: Self::BigIntHandle) {
+        let x = self.bi_get_signed_bytes(handle);
+        self.storage_store_slice_u8(key, x.as_slice());
     }
 
     fn storage_store_managed_buffer_raw(
-        &self,
+        &mut self,
         key_handle: Self::ManagedBufferHandle,
         value_handle: Self::ManagedBufferHandle,
     ) {
@@ -107,7 +108,7 @@ impl StorageWriteApiImpl for DebugApi {
         self.storage_store_slice_u8(key_bytes.as_slice(), value_bytes.as_slice());
     }
 
-    fn storage_store_managed_buffer_clear(&self, key_handle: Self::ManagedBufferHandle) {
+    fn storage_store_managed_buffer_clear(&mut self, key_handle: Self::ManagedBufferHandle) {
         let key_bytes = self.mb_to_boxed_bytes(key_handle);
         self.storage_store_slice_u8(key_bytes.as_slice(), &[]);
     }

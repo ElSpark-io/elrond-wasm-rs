@@ -29,42 +29,42 @@ impl EndpointFinishApi for VmApiImpl {
 /// The smart contract code doesn't have access to these methods directly.
 impl EndpointFinishApiImpl for VmApiImpl {
     #[inline]
-    fn finish_slice_u8(&self, slice: &[u8]) {
+    fn finish_slice_u8(&mut self, slice: &[u8]) {
         unsafe {
             finish(slice.as_ptr(), slice.len() as i32);
         }
     }
 
     #[inline]
-    fn finish_big_int_raw(&self, handle: Self::BigIntHandle) {
+    fn finish_big_int_raw(&mut self, handle: Self::BigIntHandle) {
         unsafe {
             bigIntFinishSigned(handle);
         }
     }
 
     #[inline]
-    fn finish_big_uint_raw(&self, handle: Self::BigIntHandle) {
+    fn finish_big_uint_raw(&mut self, handle: Self::BigIntHandle) {
         unsafe {
             bigIntFinishUnsigned(handle);
         }
     }
 
     #[inline]
-    fn finish_managed_buffer_raw(&self, handle: Self::ManagedBufferHandle) {
+    fn finish_managed_buffer_raw(&mut self, handle: Self::ManagedBufferHandle) {
         unsafe {
             mBufferFinish(handle);
         }
     }
 
     #[inline]
-    fn finish_u64(&self, value: u64) {
+    fn finish_u64(&mut self, value: u64) {
         unsafe {
             smallIntFinishUnsigned(value as i64);
         }
     }
 
     #[inline]
-    fn finish_i64(&self, value: i64) {
+    fn finish_i64(&mut self, value: i64) {
         unsafe {
             smallIntFinishSigned(value);
         }

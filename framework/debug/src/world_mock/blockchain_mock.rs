@@ -3,7 +3,7 @@ use crate::{
     num_bigint::BigUint,
     scenario_format::{interpret_trait::InterpreterContext, value_interpreter::interpret_string},
     tx_execution::{init_builtin_functions, BuiltinFunctionMap},
-    tx_mock::BlockchainUpdate,
+    tx_mock::BlockchainUpdate, testing_framework::vm::VM,
 };
 use mx_sc::types::heap::Address;
 use num_traits::Zero;
@@ -24,6 +24,7 @@ pub struct BlockchainMock {
     pub contract_map: ContractMap,
     pub current_dir: PathBuf,
     pub mandos_trace: Scenario,
+    pub vm: Rc<VM>,
 }
 
 impl BlockchainMock {
@@ -38,6 +39,7 @@ impl BlockchainMock {
             contract_map: ContractMap::default(),
             current_dir: std::env::current_dir().unwrap(),
             mandos_trace: Scenario::default(),
+            vm: Rc::new(Default::default()),
         }
     }
 }

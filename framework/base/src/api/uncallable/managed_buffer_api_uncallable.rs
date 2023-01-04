@@ -16,7 +16,7 @@ impl ManagedBufferApi for super::UncallableApi {
         unreachable!()
     }
 
-    fn mb_to_boxed_bytes(&self, _handle: Self::ManagedBufferHandle) -> BoxedBytes {
+    fn mb_to_boxed_bytes(&mut self, _handle: Self::ManagedBufferHandle) -> BoxedBytes {
         unreachable!()
     }
 
@@ -40,7 +40,7 @@ impl ManagedBufferApi for super::UncallableApi {
     }
 
     fn mb_copy_to_slice_pad_right(
-        &self,
+        &mut self,
         _handle: Self::ManagedBufferHandle,
         _destination: &mut [u8],
     ) {

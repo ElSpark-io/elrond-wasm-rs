@@ -40,3 +40,13 @@ To check wasm size:
 ```
 twiggy top -n 20 target/wasm32-unknown-unknown/release/wasm.wasm
 ```
+
+
+BigIntGetUnsignedBytes -> bi_get_unsigned_bytes
+BigIntGetSignedBytes -> bi_get_signed_bytes
+Sha256 -> sha256_legacy result is always 32byte
+Keccak256 -> keccak256_legacy 
+EncodeSecp256k1DerSignature -> encode_secp256k1_der_signature_legacy
+MBufferGetBytes -> mb_to_boxed_bytes, mb_copy_to_slice_pad_right, unsafe_buffer_load_address, unsafe_buffer_load_token_identifier
+
+MBufferGetByteSlice -> mb_load_slice

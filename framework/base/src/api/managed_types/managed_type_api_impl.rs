@@ -9,25 +9,25 @@ pub trait ManagedTypeApiImpl:
     BigIntApi + BigFloatApi + EllipticCurveApi + ManagedBufferApi + ErrorApi
 {
     fn mb_to_big_int_unsigned(
-        &self,
+        &mut self,
         buffer_handle: Self::ManagedBufferHandle,
         dest: Self::BigIntHandle,
     );
 
     fn mb_to_big_int_signed(
-        &self,
+        &mut self,
         buffer_handle: Self::ManagedBufferHandle,
         dest: Self::BigIntHandle,
     );
 
     fn mb_from_big_int_unsigned(
-        &self,
+        &mut self,
         big_int_handle: Self::BigIntHandle,
         dest: Self::ManagedBufferHandle,
     );
 
     fn mb_from_big_int_signed(
-        &self,
+        &mut self,
         big_int_handle: Self::BigIntHandle,
         dest: Self::ManagedBufferHandle,
     );

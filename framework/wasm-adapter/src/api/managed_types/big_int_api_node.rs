@@ -86,11 +86,11 @@ impl BigIntApi for crate::api::VmApiImpl {
     }
 
     #[inline]
-    fn bi_unsigned_byte_length(&self, x: Self::BigIntHandle) -> usize {
+    fn bi_unsigned_byte_length(&mut self, x: Self::BigIntHandle) -> usize {
         unsafe { bigIntUnsignedByteLength(x) as usize }
     }
 
-    fn bi_get_unsigned_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_unsigned_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes {
         unsafe {
             let byte_len = bigIntUnsignedByteLength(handle);
             let mut bb = BoxedBytes::allocate(byte_len as usize);
@@ -105,11 +105,11 @@ impl BigIntApi for crate::api::VmApiImpl {
     }
 
     #[inline]
-    fn bi_signed_byte_length(&self, x: Self::BigIntHandle) -> usize {
+    fn bi_signed_byte_length(&mut self, x: Self::BigIntHandle) -> usize {
         unsafe { bigIntSignedByteLength(x) as usize }
     }
 
-    fn bi_get_signed_bytes(&self, handle: Self::BigIntHandle) -> BoxedBytes {
+    fn bi_get_signed_bytes(&mut self, handle: Self::BigIntHandle) -> BoxedBytes {
         unsafe {
             let byte_len = bigIntSignedByteLength(handle);
             let mut bb = BoxedBytes::allocate(byte_len as usize);

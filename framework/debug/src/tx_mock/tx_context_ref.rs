@@ -7,7 +7,7 @@ use super::{BlockchainUpdate, TxContextStack};
 /// The VM API implementation based on a blockchain mock written in Rust.
 /// Implemented as a smart pointer to a TxContext structure, which tracks a blockchain transaction.
 #[derive(Debug)]
-pub struct TxContextRef(Rc<TxContext>);
+pub struct TxContextRef(pub Rc<TxContext>);
 
 pub type DebugApi = TxContextRef;
 
