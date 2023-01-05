@@ -299,7 +299,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn transfer_value_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         gas_limit: u64,
@@ -351,7 +351,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn transfer_esdt_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         amount: &BigUint<M>,
@@ -395,7 +395,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         nonce: u64,
@@ -444,7 +444,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn multi_transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         payments: &ManagedVec<M, EsdtTokenPayment<M>>,
         gas_limit: u64,
@@ -516,7 +516,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn async_call_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         endpoint_name: &ManagedBuffer<M>,
@@ -554,7 +554,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn create_async_call_raw(
-        &self,
+        &mut self,
         to: Self::ManagedBufferHandle,
         amount: Self::BigIntHandle,
         endpoint_name: Self::ManagedBufferHandle,
@@ -583,7 +583,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn deploy_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         amount: &BigUint<M>,
         code: &ManagedBuffer<M>,
@@ -646,7 +646,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn deploy_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         amount: &BigUint<M>,
         source_contract_address: &ManagedAddress<M>,
@@ -707,7 +707,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn upgrade_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         gas: u64,
         amount: &BigUint<M>,
@@ -756,7 +756,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn upgrade_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         gas: u64,
         amount: &BigUint<M>,
@@ -809,7 +809,7 @@ impl SendApiImpl for VmApiImpl {
     }
 
     fn execute_on_dest_context_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,

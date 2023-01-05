@@ -21,7 +21,7 @@ pub trait ManagedBufferApi: HandleTypeInfo {
 
     /// TODO: investigate the impact of using `Result<(), ()>` on the wasm output.
     fn mb_load_slice(
-        &self,
+        &mut self,
         source_handle: Self::ManagedBufferHandle,
         starting_position: usize,
         dest_slice: &mut [u8],

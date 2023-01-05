@@ -40,7 +40,7 @@ pub trait ManagedTypeApiImpl:
         dest: Self::ManagedBufferHandle,
     );
 
-    fn validate_token_identifier(&self, token_id_handle: Self::ManagedBufferHandle) -> bool {
+    fn validate_token_identifier(&mut self, token_id_handle: Self::ManagedBufferHandle) -> bool {
         let token_id_len = self.mb_len(token_id_handle.clone());
         if token_id_len > IDENTIFIER_MAX_LENGTH {
             return false;

@@ -88,7 +88,7 @@ impl ManagedTypeApiImpl for VmApiImpl {
     }
 
     #[inline]
-    fn validate_token_identifier(&self, token_id_handle: Self::ManagedBufferHandle) -> bool {
+    fn validate_token_identifier(&mut self, token_id_handle: Self::ManagedBufferHandle) -> bool {
         unsafe { validateTokenIdentifier(token_id_handle) != 0 }
     }
 }

@@ -84,11 +84,17 @@ impl ManagedBufferApi for DebugApi {
     }
 
     fn mb_load_slice(
-        &self,
+        &mut self,
         source_handle: Self::ManagedBufferHandle,
         starting_position: usize,
         dest_slice: &mut [u8],
     ) -> Result<(), InvalidSliceError> {
+        // memstore
+        let data_length = dest_slice.len();
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(dest_slice.as_ptr() as u32, data_length as u32).unwrap();
+
         let opt_slice = self.mb_get_slice(source_handle, starting_position, dest_slice.len());
         if let Some(slice) = opt_slice {
             dest_slice.copy_from_slice(slice.as_slice());

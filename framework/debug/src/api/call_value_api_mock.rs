@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::{num_bigint, tx_mock::TxPanic, DebugApi};
 use mx_sc::{
     api::{CallValueApi, CallValueApiImpl},
@@ -60,7 +62,7 @@ impl CallValueApiImpl for DebugApi {
     }
 
     #[inline]
-    fn token(&self) -> Option<Self::ManagedBufferHandle> {
+    fn token(&mut self) -> Option<Self::ManagedBufferHandle> {
         self.fail_if_more_than_one_esdt_transfer();
 
         if self.esdt_num_transfers() > 0 {
@@ -100,15 +102,24 @@ impl CallValueApiImpl for DebugApi {
     }
 
     #[inline]
-    fn token_by_index(&self, index: usize) -> Self::ManagedBufferHandle {
-        if let Some(esdt_value) = self.input_ref().received_esdt().get(index) {
-            self.insert_new_managed_buffer(esdt_value.token_identifier.clone())
-        } else {
+    fn token_by_index(&mut self, index: usize) -> Self::ManagedBufferHandle {
+        let esdt_value = self.input_ref().received_esdt().get(index);
+        if esdt_value.is_none() {
             std::panic::panic_any(TxPanic {
                 status: 10,
                 message: err_msg::ESDT_INVALID_TOKEN_INDEX.to_string(),
             });
         }
+
+        let esdt_value = esdt_value.unwrap().clone();
+
+        // memstore
+        let res = [0u8; 32];
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, esdt_value.token_identifier.len() as u32).unwrap();
+
+        self.insert_new_managed_buffer(esdt_value.token_identifier.clone())
     }
 
     #[inline]

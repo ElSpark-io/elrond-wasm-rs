@@ -26,7 +26,7 @@ impl CallValueApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn token(&self) -> Option<Self::ManagedBufferHandle> {
+    fn token(&mut self) -> Option<Self::ManagedBufferHandle> {
         unreachable!()
     }
 
@@ -46,7 +46,7 @@ impl CallValueApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn token_by_index(&self, _index: usize) -> Self::ManagedBufferHandle {
+    fn token_by_index(&mut self, _index: usize) -> Self::ManagedBufferHandle {
         unreachable!()
     }
 

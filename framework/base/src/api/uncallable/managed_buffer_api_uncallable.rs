@@ -21,7 +21,7 @@ impl ManagedBufferApi for super::UncallableApi {
     }
 
     fn mb_load_slice(
-        &self,
+        &mut self,
         _source_handle: Self::ManagedBufferHandle,
         _starting_position: usize,
         _dest_slice: &mut [u8],

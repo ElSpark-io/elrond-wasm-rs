@@ -26,7 +26,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn transfer_value_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _to: &ManagedAddress<M>,
         _amount: &BigUint<M>,
         _gas_limit: u64,
@@ -48,7 +48,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn transfer_esdt_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _to: &ManagedAddress<M>,
         _token: &TokenIdentifier<M>,
         _amount: &BigUint<M>,
@@ -72,7 +72,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _to: &ManagedAddress<M>,
         _token: &TokenIdentifier<M>,
         _nonce: u64,
@@ -98,7 +98,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn multi_transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _to: &ManagedAddress<M>,
         _payments: &ManagedVec<M, EsdtTokenPayment<M>>,
         _gas_limit: u64,
@@ -120,7 +120,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn async_call_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _to: &ManagedAddress<M>,
         _amount: &BigUint<M>,
         _endpoint_name: &ManagedBuffer<M>,
@@ -140,7 +140,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn create_async_call_raw(
-        &self,
+        &mut self,
         _to: Self::ManagedBufferHandle,
         _amount: Self::BigIntHandle,
         _endpoint_name: Self::ManagedBufferHandle,
@@ -155,7 +155,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn deploy_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         _amount: &BigUint<M>,
         _code: &ManagedBuffer<M>,
@@ -177,7 +177,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn deploy_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         _amount: &BigUint<M>,
         _source_contract_address: &ManagedAddress<M>,
@@ -199,7 +199,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn upgrade_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _sc_address: &ManagedAddress<M>,
         _gas: u64,
         _amount: &BigUint<M>,
@@ -223,7 +223,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn upgrade_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _sc_address: &ManagedAddress<M>,
         _gas: u64,
         _amount: &BigUint<M>,
@@ -247,7 +247,7 @@ impl SendApiImpl for UncallableApi {
     }
 
     fn execute_on_dest_context_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         _to: &ManagedAddress<M>,
         _value: &BigUint<M>,

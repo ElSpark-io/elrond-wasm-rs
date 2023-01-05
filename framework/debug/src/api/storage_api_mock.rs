@@ -1,13 +1,15 @@
+use std::rc::Rc;
+
 use crate::{
     num_bigint::{BigInt, Sign},
     tx_mock::TxPanic,
     DebugApi,
 };
 use alloc::vec::Vec;
-use mx_sc::api::{
+use mx_sc::{api::{
     BigIntApi, ManagedBufferApi, StorageReadApi, StorageReadApiImpl, StorageWriteApi,
     StorageWriteApiImpl,
-};
+}, types::BoxedBytes};
 
 impl StorageReadApi for DebugApi {
     type StorageReadApiImpl = DebugApi;
@@ -32,7 +34,19 @@ impl StorageReadApiImpl for DebugApi {
     }
 
     fn storage_load_to_heap(&mut self, key: &[u8]) -> Box<[u8]> {
-        self.storage_load_vec_u8(key).into_boxed_slice()
+        let data = self.storage_load_vec_u8(key).into_boxed_slice();
+
+        // memstore
+        let len = self.storage_load_len(key);
+        unsafe {
+            let res = BoxedBytes::allocate(len);
+            let self_mut = Rc::get_mut(&mut self.0).unwrap();
+            let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+
+            vm.mem_store(res.as_ptr() as u32, data.len() as u32).unwrap();
+        }
+
+        data
     }
 
     fn storage_load_big_uint_raw(&mut self, key: &[u8], dest: Self::ManagedBufferHandle) {

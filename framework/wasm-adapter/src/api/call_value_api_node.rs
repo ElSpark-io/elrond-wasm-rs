@@ -53,7 +53,7 @@ impl CallValueApiImpl for VmApiImpl {
     }
 
     #[cfg(not(feature = "ei-unmanaged-node"))]
-    fn load_all_esdt_transfers(&self, dest_handle: Self::ManagedBufferHandle) {
+    fn load_all_esdt_transfers(&mut self, dest_handle: Self::ManagedBufferHandle) {
         unsafe {
             managedGetMultiESDTCallValue(dest_handle);
         }
@@ -69,7 +69,7 @@ impl CallValueApiImpl for VmApiImpl {
         }
     }
 
-    fn token(&self) -> Option<Self::ManagedBufferHandle> {
+    fn token(&mut self) -> Option<Self::ManagedBufferHandle> {
         unsafe {
             let mut name_buffer = [0u8; MAX_POSSIBLE_TOKEN_IDENTIFIER_LENGTH];
             let name_len = getESDTTokenName(name_buffer.as_mut_ptr());
@@ -100,7 +100,7 @@ impl CallValueApiImpl for VmApiImpl {
         }
     }
 
-    fn token_by_index(&self, index: usize) -> Self::ManagedBufferHandle {
+    fn token_by_index(&mut self, index: usize) -> Self::ManagedBufferHandle {
         unsafe {
             let mut name_buffer = [0u8; MAX_POSSIBLE_TOKEN_IDENTIFIER_LENGTH];
             let name_len = getESDTTokenNameByIndex(name_buffer.as_mut_ptr(), index as i32);

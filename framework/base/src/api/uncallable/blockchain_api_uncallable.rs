@@ -19,11 +19,11 @@ impl BlockchainApi for UncallableApi {
 }
 
 impl BlockchainApiImpl for UncallableApi {
-    fn get_sc_address_legacy(&self) -> Address {
+    fn get_sc_address_legacy(&mut self) -> Address {
         unreachable!()
     }
 
-    fn get_owner_address_legacy(&self) -> Address {
+    fn get_owner_address_legacy(&mut self) -> Address {
         unreachable!()
     }
 
@@ -35,11 +35,11 @@ impl BlockchainApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn get_caller_legacy(&self) -> Address {
+    fn get_caller_legacy(&mut self) -> Address {
         unreachable!()
     }
 
-    fn load_balance_legacy(&self, _dest: Self::BigIntHandle, _address: &Address) {
+    fn load_balance_legacy(&mut self, _dest: Self::BigIntHandle, _address: &Address) {
         unreachable!()
     }
 
@@ -47,7 +47,7 @@ impl BlockchainApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn get_tx_hash_legacy(&self) -> H256 {
+    fn get_tx_hash_legacy(&mut self) -> H256 {
         unreachable!()
     }
 
@@ -71,7 +71,7 @@ impl BlockchainApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn get_block_random_seed_legacy(&self) -> Box<[u8; 48]> {
+    fn get_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
         unreachable!()
     }
 
@@ -91,12 +91,12 @@ impl BlockchainApiImpl for UncallableApi {
         unreachable!()
     }
 
-    fn get_prev_block_random_seed_legacy(&self) -> Box<[u8; 48]> {
+    fn get_prev_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
         unreachable!()
     }
 
     fn get_current_esdt_nft_nonce(
-        &self,
+        &mut self,
         _address_handle: Self::ManagedBufferHandle,
         _token_id_handle: Self::ManagedBufferHandle,
     ) -> u64 {
@@ -104,7 +104,7 @@ impl BlockchainApiImpl for UncallableApi {
     }
 
     fn load_esdt_balance(
-        &self,
+        &mut self,
         _address_handle: Self::ManagedBufferHandle,
         _token_id_handle: Self::ManagedBufferHandle,
         _nonce: u64,
@@ -114,7 +114,7 @@ impl BlockchainApiImpl for UncallableApi {
     }
 
     fn load_esdt_token_data<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _address: &ManagedAddress<M>,
         _token: &TokenIdentifier<M>,
         _nonce: u64,

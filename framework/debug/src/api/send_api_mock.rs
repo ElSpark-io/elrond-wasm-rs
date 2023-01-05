@@ -51,13 +51,13 @@ impl DebugApi {
     }
 
     fn create_async_call_data(
-        &self,
+        &mut self,
         to: Address,
         egld_value: num_bigint::BigUint,
         func_name: TxFunctionName,
         arguments: Vec<Vec<u8>>,
     ) -> AsyncCallTxData {
-        let contract_address = &self.input_ref().to;
+        let contract_address = &self.input_ref().to.clone();
         let tx_hash = self.get_tx_hash_legacy();
         AsyncCallTxData {
             from: contract_address.clone(),
@@ -70,7 +70,7 @@ impl DebugApi {
     }
 
     fn prepare_execute_on_dest_context_input(
-        &self,
+        &mut self,
         to: Address,
         egld_value: num_bigint::BigUint,
         func_name: TxFunctionName,
@@ -81,7 +81,7 @@ impl DebugApi {
     }
 
     fn perform_execute_on_dest_context(
-        &self,
+        &mut self,
         to: Address,
         egld_value: num_bigint::BigUint,
         func_name: TxFunctionName,
@@ -104,7 +104,7 @@ impl DebugApi {
     }
 
     fn perform_transfer_execute(
-        &self,
+        &mut self,
         to: Address,
         egld_value: num_bigint::BigUint,
         func_name: TxFunctionName,
@@ -130,12 +130,12 @@ impl DebugApi {
     }
 
     fn perform_deploy(
-        &self,
+        &mut self,
         contract_code: Vec<u8>,
         egld_value: num_bigint::BigUint,
         args: Vec<Vec<u8>>,
     ) -> (Address, Vec<Vec<u8>>) {
-        let contract_address = &self.input_ref().to;
+        let contract_address = &self.input_ref().to.clone();
         let tx_hash = self.get_tx_hash_legacy();
         let tx_input = TxInput {
             from: contract_address.clone(),
@@ -178,7 +178,7 @@ impl DebugApi {
     }
 
     fn perform_upgrade_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         amount: &BigUint<M>,
         contract_code: Vec<u8>,
@@ -225,7 +225,7 @@ impl SendApi for DebugApi {
 
 impl SendApiImpl for DebugApi {
     fn transfer_value_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         _gas_limit: u64,
@@ -247,7 +247,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn transfer_esdt_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         amount: &BigUint<M>,
@@ -273,7 +273,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         nonce: u64,
@@ -309,7 +309,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn multi_transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         payments: &ManagedVec<M, EsdtTokenPayment<M>>,
         _gas_limit: u64,
@@ -353,7 +353,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn async_call_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         endpoint_name: &ManagedBuffer<M>,
@@ -376,7 +376,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn create_async_call_raw(
-        &self,
+        &mut self,
         to: Self::ManagedBufferHandle,
         amount: Self::BigIntHandle,
         endpoint_name_handle: Self::ManagedBufferHandle,
@@ -419,7 +419,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn deploy_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         amount: &BigUint<M>,
         code: &ManagedBuffer<M>,
@@ -436,7 +436,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn deploy_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         amount: &BigUint<M>,
         source_contract_address: &ManagedAddress<M>,
@@ -456,7 +456,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn upgrade_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         _gas: u64,
         amount: &BigUint<M>,
@@ -469,7 +469,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn upgrade_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         _gas: u64,
         amount: &BigUint<M>,
@@ -482,7 +482,7 @@ impl SendApiImpl for DebugApi {
     }
 
     fn execute_on_dest_context_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         _gas: u64,
         to: &ManagedAddress<M>,
         value: &BigUint<M>,

@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::{
     num_bigint,
     world_mock::{is_smart_contract_address, EsdtData, EsdtInstance},
@@ -21,15 +23,33 @@ impl BlockchainApi for DebugApi {
 }
 
 impl BlockchainApiImpl for DebugApi {
-    fn get_caller_legacy(&self) -> Address {
+    fn get_caller_legacy(&mut self) -> Address {
+        // memstore
+        let res = Address::zero();
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+
         self.input_ref().from.clone()
     }
 
-    fn get_sc_address_legacy(&self) -> Address {
+    fn get_sc_address_legacy(&mut self) -> Address {
+        // memstore
+        let res = Address::zero();
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+
         self.input_ref().to.clone()
     }
 
-    fn get_owner_address_legacy(&self) -> Address {
+    fn get_owner_address_legacy(&mut self) -> Address {
+        // memstore
+        let res = Address::zero();
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+
         self.with_contract_account(|account| {
             account
                 .contract_owner
@@ -46,7 +66,7 @@ impl BlockchainApiImpl for DebugApi {
         is_smart_contract_address(address)
     }
 
-    fn load_balance_legacy(&self, dest: Self::BigIntHandle, address: &Address) {
+    fn load_balance_legacy(&mut self, dest: Self::BigIntHandle, address: &Address) {
         assert!(
             address == &self.get_sc_address_legacy(),
             "get balance not yet implemented for accounts other than the contract itself"
@@ -59,7 +79,13 @@ impl BlockchainApiImpl for DebugApi {
         panic!("get_state_root_hash_legacy not yet implemented")
     }
 
-    fn get_tx_hash_legacy(&self) -> H256 {
+    fn get_tx_hash_legacy(&mut self) -> H256 {
+        // memstore
+        let res = H256::zero();
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+
         self.input_ref().tx_hash.clone()
     }
 
@@ -83,7 +109,13 @@ impl BlockchainApiImpl for DebugApi {
         self.blockchain_ref().current_block_info.block_epoch
     }
 
-    fn get_block_random_seed_legacy(&self) -> Box<[u8; 48]> {
+    fn get_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
+        // memstore
+        let res = [0u8; 48];
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+
         self.blockchain_ref()
             .current_block_info
             .block_random_seed
@@ -106,7 +138,13 @@ impl BlockchainApiImpl for DebugApi {
         self.blockchain_ref().previous_block_info.block_epoch
     }
 
-    fn get_prev_block_random_seed_legacy(&self) -> Box<[u8; 48]> {
+    fn get_prev_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
+        // memstore
+        let res = [0u8; 48];
+        let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+
         self.blockchain_ref()
             .previous_block_info
             .block_random_seed
@@ -114,7 +152,7 @@ impl BlockchainApiImpl for DebugApi {
     }
 
     fn get_current_esdt_nft_nonce(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
     ) -> u64 {
@@ -137,7 +175,7 @@ impl BlockchainApiImpl for DebugApi {
     }
 
     fn load_esdt_balance(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
         nonce: u64,
@@ -161,7 +199,7 @@ impl BlockchainApiImpl for DebugApi {
     }
 
     fn load_esdt_token_data<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         address: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         nonce: u64,

@@ -23,27 +23,30 @@ pub trait BlockchainApi: ManagedTypeApi {
 /// When mocking the blockchain state, we use the Rc/RefCell pattern
 /// to isolate mock state mutability from the contract interface.
 pub trait BlockchainApiImpl: ManagedTypeApiImpl {
-    fn get_caller_legacy(&self) -> Address;
+    fn get_caller_legacy(&mut self) -> Address;
 
-    fn load_caller_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_caller_legacy().as_bytes());
+    fn load_caller_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_caller_legacy();
+        self.mb_overwrite(dest, x.as_bytes());
     }
 
-    fn get_sc_address_legacy(&self) -> Address;
+    fn get_sc_address_legacy(&mut self) -> Address;
 
-    fn load_sc_address_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_sc_address_legacy().as_bytes())
+    fn load_sc_address_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_sc_address_legacy();
+        self.mb_overwrite(dest, x.as_bytes())
     }
 
-    fn get_owner_address_legacy(&self) -> Address;
+    fn get_owner_address_legacy(&mut self) -> Address;
 
-    fn load_owner_address_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_owner_address_legacy().as_bytes())
+    fn load_owner_address_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_owner_address_legacy();
+        self.mb_overwrite(dest, x.as_bytes())
     }
 
     fn get_shard_of_address_legacy(&self, address: &Address) -> u32;
 
-    fn get_shard_of_address(&self, address_handle: Self::ManagedBufferHandle) -> u32 {
+    fn get_shard_of_address(&mut self, address_handle: Self::ManagedBufferHandle) -> u32 {
         let mut address = Address::zero();
         let _ = self.mb_load_slice(address_handle, 0, address.as_mut());
         self.get_shard_of_address_legacy(&address)
@@ -51,15 +54,15 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
 
     fn is_smart_contract_legacy(&self, address: &Address) -> bool;
 
-    fn is_smart_contract(&self, address_handle: Self::ManagedBufferHandle) -> bool {
+    fn is_smart_contract(&mut self, address_handle: Self::ManagedBufferHandle) -> bool {
         let mut address = Address::zero();
         let _ = self.mb_load_slice(address_handle, 0, address.as_mut());
         self.is_smart_contract_legacy(&address)
     }
 
-    fn load_balance_legacy(&self, dest: Self::BigIntHandle, address: &Address);
+    fn load_balance_legacy(&mut self, dest: Self::BigIntHandle, address: &Address);
 
-    fn load_balance(&self, dest: Self::BigIntHandle, address_handle: Self::ManagedBufferHandle) {
+    fn load_balance(&mut self, dest: Self::BigIntHandle, address_handle: Self::ManagedBufferHandle) {
         let mut address = Address::zero();
         let _ = self.mb_load_slice(address_handle, 0, address.as_mut());
         self.load_balance_legacy(dest, &address);
@@ -71,10 +74,11 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
         self.mb_overwrite(dest, self.get_state_root_hash_legacy().as_bytes());
     }
 
-    fn get_tx_hash_legacy(&self) -> H256;
+    fn get_tx_hash_legacy(&mut self) -> H256;
 
-    fn load_tx_hash_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_tx_hash_legacy().as_bytes());
+    fn load_tx_hash_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_tx_hash_legacy();
+        self.mb_overwrite(dest, x.as_bytes());
     }
 
     fn get_gas_left(&self) -> u64;
@@ -87,10 +91,11 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
 
     fn get_block_epoch(&self) -> u64;
 
-    fn get_block_random_seed_legacy(&self) -> Box<[u8; 48]>;
+    fn get_block_random_seed_legacy(&mut self) -> Box<[u8; 48]>;
 
-    fn load_block_random_seed_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_block_random_seed_legacy().as_slice());
+    fn load_block_random_seed_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_block_random_seed_legacy();
+        self.mb_overwrite(dest, x.as_slice());
     }
 
     fn get_prev_block_timestamp(&self) -> u64;
@@ -101,20 +106,21 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
 
     fn get_prev_block_epoch(&self) -> u64;
 
-    fn get_prev_block_random_seed_legacy(&self) -> Box<[u8; 48]>;
+    fn get_prev_block_random_seed_legacy(&mut self) -> Box<[u8; 48]>;
 
-    fn load_prev_block_random_seed_managed(&self, dest: Self::ManagedBufferHandle) {
-        self.mb_overwrite(dest, self.get_prev_block_random_seed_legacy().as_slice());
+    fn load_prev_block_random_seed_managed(&mut self, dest: Self::ManagedBufferHandle) {
+        let x = self.get_prev_block_random_seed_legacy();
+        self.mb_overwrite(dest, x.as_slice());
     }
 
     fn get_current_esdt_nft_nonce(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
     ) -> u64;
 
     fn load_esdt_balance(
-        &self,
+        &mut self,
         address_handle: Self::ManagedBufferHandle,
         token_id_handle: Self::ManagedBufferHandle,
         nonce: u64,
@@ -122,7 +128,7 @@ pub trait BlockchainApiImpl: ManagedTypeApiImpl {
     );
 
     fn load_esdt_token_data<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         address: &ManagedAddress<M>,
         token_id: &TokenIdentifier<M>,
         nonce: u64,

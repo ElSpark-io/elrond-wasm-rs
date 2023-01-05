@@ -21,7 +21,7 @@ pub trait CallValueApiImpl: ErrorApiImpl + ManagedTypeApiImpl + Sized {
     fn load_egld_value(&self, dest_handle: Self::BigIntHandle);
 
     /// Loads all ESDT call values into a managed vec. Overwrites destination.
-    fn load_all_esdt_transfers(&self, dest_handle: Self::ManagedBufferHandle) {
+    fn load_all_esdt_transfers(&mut self, dest_handle: Self::ManagedBufferHandle) {
         load_all_esdt_transfers_from_unmanaged(self, dest_handle);
     }
 
@@ -33,7 +33,7 @@ pub trait CallValueApiImpl: ErrorApiImpl + ManagedTypeApiImpl + Sized {
 
     /// Returns the call value token identifier of the current call.
     /// The identifier is wrapped in a TokenIdentifier object, to hide underlying logic.
-    fn token(&self) -> Option<Self::ManagedBufferHandle>;
+    fn token(&mut self) -> Option<Self::ManagedBufferHandle>;
 
     /// Returns the nonce of the received ESDT token.
     /// Will return 0 in case of EGLD or fungible ESDT transfer.
@@ -45,14 +45,14 @@ pub trait CallValueApiImpl: ErrorApiImpl + ManagedTypeApiImpl + Sized {
 
     fn esdt_value_by_index(&self, index: usize) -> Self::BigIntHandle;
 
-    fn token_by_index(&self, index: usize) -> Self::ManagedBufferHandle;
+    fn token_by_index(&mut self, index: usize) -> Self::ManagedBufferHandle;
 
     fn esdt_token_nonce_by_index(&self, index: usize) -> u64;
 
     fn esdt_token_type_by_index(&self, index: usize) -> EsdtTokenType;
 }
 
-pub fn load_all_esdt_transfers_from_unmanaged<A>(api: &A, dest_handle: A::ManagedBufferHandle)
+pub fn load_all_esdt_transfers_from_unmanaged<A>(api: &mut A, dest_handle: A::ManagedBufferHandle)
 where
     A: CallValueApiImpl,
 {

@@ -32,7 +32,7 @@ impl DebugApi {
     }
 
     pub fn address_handle_to_value(
-        &self,
+        &mut self,
         address_handle: <Self as HandleTypeInfo>::ManagedBufferHandle,
     ) -> Address {
         let mut address = Address::zero();

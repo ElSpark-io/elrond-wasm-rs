@@ -25,7 +25,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
 
     /// Sends EGLD to an address (optionally) and executes like an async call, but without callback.
     fn transfer_value_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         gas_limit: u64,
@@ -44,7 +44,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
 
     /// Sends ESDT to an address and executes like an async call, but without callback.
     fn transfer_esdt_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         amount: &BigUint<M>,
@@ -66,7 +66,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     /// Sends ESDT NFT to an address and executes like an async call, but without callback.
     #[allow(clippy::too_many_arguments)]
     fn transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         token: &TokenIdentifier<M>,
         nonce: u64,
@@ -89,7 +89,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     ) -> Result<(), &'static [u8]>;
 
     fn multi_transfer_esdt_nft_execute<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         payments: &ManagedVec<M, EsdtTokenPayment<M>>,
         gas_limit: u64,
@@ -113,7 +113,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     /// The data is expected to be of the form `functionName@<arg1-hex>@<arg2-hex>@...`.
     /// Use a `HexCallDataSerializer` to prepare this field.
     fn async_call_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         to: &ManagedAddress<M>,
         amount: &BigUint<M>,
         endpoint_name: &ManagedBuffer<M>,
@@ -130,7 +130,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
 
     #[allow(clippy::too_many_arguments)]
     fn create_async_call_raw(
-        &self,
+        &mut self,
         to: Self::ManagedBufferHandle,
         amount: Self::BigIntHandle,
         endpoint_name: Self::ManagedBufferHandle,
@@ -147,7 +147,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     /// Also unlike `async_call_raw`, it uses an argument buffer to pass arguments
     /// If the deployment fails, Option::None is returned
     fn deploy_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         amount: &BigUint<M>,
         code: &ManagedBuffer<M>,
@@ -168,7 +168,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     /// The deployment is done synchronously and the new contract's address is returned.
     /// If the deployment fails, Option::None is returned
     fn deploy_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         amount: &BigUint<M>,
         source_contract_address: &ManagedAddress<M>,
@@ -186,7 +186,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     ) -> (ManagedAddress<M>, ManagedVec<M, ManagedBuffer<M>>);
 
     fn upgrade_from_source_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         gas: u64,
         amount: &BigUint<M>,
@@ -209,7 +209,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
     /// The upgrade is synchronous, and the current transaction will fail if the upgrade fails.
     /// The child contract's new init function will be called with the provided arguments
     fn upgrade_contract<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         sc_address: &ManagedAddress<M>,
         gas: u64,
         amount: &BigUint<M>,
@@ -230,7 +230,7 @@ pub trait SendApiImpl: ManagedTypeApiImpl {
 
     /// Same shard, in-line execution of another contract.
     fn execute_on_dest_context_raw<M: ManagedTypeApi>(
-        &self,
+        &mut self,
         gas: u64,
         address: &ManagedAddress<M>,
         value: &BigUint<M>,

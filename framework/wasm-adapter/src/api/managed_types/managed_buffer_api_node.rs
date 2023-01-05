@@ -68,7 +68,7 @@ impl ManagedBufferApi for crate::api::VmApiImpl {
     }
 
     fn mb_load_slice(
-        &self,
+        &mut self,
         source_handle: Self::ManagedBufferHandle,
         starting_position: usize,
         dest_slice: &mut [u8],
