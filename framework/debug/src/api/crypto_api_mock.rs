@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use crate::DebugApi;
+use crate::{DebugApi, testing_framework::vm::static_vm_mem_store};
 use ed25519_dalek::*;
 use mx_sc::{
     api::{
@@ -23,12 +23,15 @@ impl CryptoApi for DebugApi {
 impl CryptoApiImpl for DebugApi {
     fn sha256_legacy(&mut self, data: &[u8]) -> [u8; SHA256_RESULT_LEN] {
         // memstore
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
 
         // TODO: check offset is 0
         // result of sha256 is 32 byte
-        vm.mem_store(0, 32).unwrap();
+        // vm.mem_store(0, 32).unwrap();
+        unsafe{
+            static_vm_mem_store(0,32).unwrap();
+        }
 
         let mut hasher = Sha256::new();
         hasher.update(data);
@@ -49,12 +52,15 @@ impl CryptoApiImpl for DebugApi {
 
     fn keccak256_legacy(&mut self, data: &[u8]) -> [u8; KECCAK256_RESULT_LEN] {
         // memstore
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
 
         // TODO: check offset is 0
         // result of sha256 is 32 byte
-        vm.mem_store(0, 32).unwrap();
+        // vm.mem_store(0, 32).unwrap();
+        unsafe{
+            static_vm_mem_store(0,32).unwrap();
+        }
 
         let mut hasher = Keccak256::new();
         hasher.update(data);

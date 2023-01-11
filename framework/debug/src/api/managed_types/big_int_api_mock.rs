@@ -1,4 +1,4 @@
-use crate::{num_bigint, DebugApi};
+use crate::{num_bigint, testing_framework::vm::static_vm_mem_store, DebugApi};
 use core::{
     cmp::Ordering,
     ops::{Add, BitAnd, BitOr, BitXor, Div, Mul, Neg, Rem, Shl, Shr, Sub},
@@ -10,7 +10,11 @@ use mx_sc::{
 };
 use num_bigint::BigInt;
 use num_traits::{pow, sign::Signed, Zero};
-use std::{convert::TryInto, rc::Rc};
+use std::{
+    convert::TryInto,
+    ops::{Deref, DerefMut},
+    rc::Rc,
+};
 
 use super::managed_type_util::big_int_to_i64;
 
@@ -107,9 +111,13 @@ impl BigIntApi for DebugApi {
         let bi = self.bi_get(handle);
 
         let byte_length = bi.to_bytes_be().1.len() as u32;
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(byte_length, byte_length).unwrap();
+        unsafe {
+            let bb = BoxedBytes::allocate(byte_length as usize);
+            static_vm_mem_store(bb.as_ptr() as u32, byte_length).unwrap();
+        }
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(byte_length, byte_length).unwrap();
 
         if bi.is_zero() {
             BoxedBytes::empty()
@@ -132,9 +140,13 @@ impl BigIntApi for DebugApi {
         let bi = self.bi_get(handle);
 
         let byte_length = bi.to_signed_bytes_be().len() as u32;
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(byte_length, byte_length).unwrap();
+        unsafe {
+            let bb = BoxedBytes::allocate(byte_length as usize);
+            static_vm_mem_store(bb.as_ptr() as u32, byte_length).unwrap();
+        }
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(byte_length, byte_length).unwrap();
 
         if bi.is_zero() {
             BoxedBytes::empty()

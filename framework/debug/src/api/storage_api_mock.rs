@@ -3,7 +3,7 @@ use std::rc::Rc;
 use crate::{
     num_bigint::{BigInt, Sign},
     tx_mock::TxPanic,
-    DebugApi,
+    DebugApi, testing_framework::vm::static_vm_mem_store,
 };
 use alloc::vec::Vec;
 use mx_sc::{api::{
@@ -40,10 +40,11 @@ impl StorageReadApiImpl for DebugApi {
         let len = self.storage_load_len(key);
         unsafe {
             let res = BoxedBytes::allocate(len);
-            let self_mut = Rc::get_mut(&mut self.0).unwrap();
-            let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+            // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+            // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
 
-            vm.mem_store(res.as_ptr() as u32, data.len() as u32).unwrap();
+            // vm.mem_store(res.as_ptr() as u32, data.len() as u32).unwrap();
+            static_vm_mem_store(res.as_ptr() as u32, data.len() as u32).unwrap();
         }
 
         data

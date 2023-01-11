@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use crate::{num_bigint, tx_mock::TxPanic, DebugApi};
+use crate::{num_bigint, tx_mock::TxPanic, DebugApi, testing_framework::vm::static_vm_mem_store};
 use mx_sc::{
     api::{CallValueApi, CallValueApiImpl},
     err_msg,
@@ -115,9 +115,12 @@ impl CallValueApiImpl for DebugApi {
 
         // memstore
         let res = [0u8; 32];
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, esdt_value.token_identifier.len() as u32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, esdt_value.token_identifier.len() as u32).unwrap();
+        unsafe{
+            static_vm_mem_store(res.as_ptr() as u32, esdt_value.token_identifier.len() as u32).unwrap();
+        }
 
         self.insert_new_managed_buffer(esdt_value.token_identifier.clone())
     }

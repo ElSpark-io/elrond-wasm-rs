@@ -3,7 +3,7 @@ use std::rc::Rc;
 use crate::{
     num_bigint,
     world_mock::{is_smart_contract_address, EsdtData, EsdtInstance},
-    DebugApi,
+    DebugApi, testing_framework::vm::static_vm_mem_store,
 };
 use mx_sc::{
     api::{BlockchainApi, BlockchainApiImpl, HandleConstraints, ManagedBufferApi, ManagedTypeApi},
@@ -26,9 +26,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_caller_legacy(&mut self) -> Address {
         // memstore
         let res = Address::zero();
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 32).unwrap();
 
         self.input_ref().from.clone()
     }
@@ -36,9 +37,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_sc_address_legacy(&mut self) -> Address {
         // memstore
         let res = Address::zero();
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 32).unwrap();
 
         self.input_ref().to.clone()
     }
@@ -46,9 +48,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_owner_address_legacy(&mut self) -> Address {
         // memstore
         let res = Address::zero();
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 32).unwrap();
 
         self.with_contract_account(|account| {
             account
@@ -82,9 +85,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_tx_hash_legacy(&mut self) -> H256 {
         // memstore
         let res = H256::zero();
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 32).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 32).unwrap();
 
         self.input_ref().tx_hash.clone()
     }
@@ -112,9 +116,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
         // memstore
         let res = [0u8; 48];
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 48).unwrap();
 
         self.blockchain_ref()
             .current_block_info
@@ -141,9 +146,10 @@ impl BlockchainApiImpl for DebugApi {
     fn get_prev_block_random_seed_legacy(&mut self) -> Box<[u8; 48]> {
         // memstore
         let res = [0u8; 48];
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(res.as_ptr() as u32, 48).unwrap();
+        static_vm_mem_store(res.as_ptr() as u32, 48).unwrap();
 
         self.blockchain_ref()
             .previous_block_info

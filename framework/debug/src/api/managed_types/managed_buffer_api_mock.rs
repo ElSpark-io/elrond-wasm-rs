@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use crate::DebugApi;
+use crate::{DebugApi, testing_framework::vm::static_vm_mem_store};
 use mx_sc::{
     api::{HandleTypeInfo, InvalidSliceError, ManagedBufferApi},
     types::heap::BoxedBytes,
@@ -75,9 +75,10 @@ impl ManagedBufferApi for DebugApi {
         unsafe {
             let data_length = data.len();
             let res = BoxedBytes::allocate(data_length as usize);
-            let self_mut = Rc::get_mut(&mut self.0).unwrap();
-            let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-            vm.mem_store(res.as_ptr() as u32, data_length as u32).unwrap();
+            // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+            // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+            // vm.mem_store(res.as_ptr() as u32, data_length as u32).unwrap();
+            static_vm_mem_store(res.as_ptr() as u32, data_length as u32).unwrap();
         }
 
         data.into()
@@ -91,9 +92,12 @@ impl ManagedBufferApi for DebugApi {
     ) -> Result<(), InvalidSliceError> {
         // memstore
         let data_length = dest_slice.len();
-        let self_mut = Rc::get_mut(&mut self.0).unwrap();
-        let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
-        vm.mem_store(dest_slice.as_ptr() as u32, data_length as u32).unwrap();
+        // let self_mut = Rc::get_mut(&mut self.0).unwrap();
+        // let vm = Rc::get_mut(&mut self_mut.vm).unwrap();
+        // vm.mem_store(dest_slice.as_ptr() as u32, data_length as u32).unwrap();
+        unsafe{
+            static_vm_mem_store(dest_slice.as_ptr() as u32, data_length as u32).unwrap();
+        }
 
         let opt_slice = self.mb_get_slice(source_handle, starting_position, dest_slice.len());
         if let Some(slice) = opt_slice {
