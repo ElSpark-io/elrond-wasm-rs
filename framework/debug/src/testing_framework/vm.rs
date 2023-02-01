@@ -33,7 +33,11 @@ impl VM {
 
     pub fn mem_store(&mut self, offset: u32, data_length: u32) -> Result<(), &'static [u8]> {
         // TODO: mock offset to prevent randomly allocating.
-        let offset = self.offset + self.memory_size;
+        let offset = if self.offset>0 {
+            self.memory_size
+        } else {
+            offset
+        };
 
         if data_length == 0 {
             return Ok(());
