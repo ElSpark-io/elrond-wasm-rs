@@ -20,6 +20,7 @@ pub struct VM {
     // memory_size is an index of the end of mem
     pub memory_size: u32,
 
+    // data exist from init_offset to offset
     pub offset: u32,
     pub init_offset: u32,
 }
