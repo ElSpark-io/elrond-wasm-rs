@@ -17,9 +17,11 @@ pub fn get_vm() -> VM {
 #[derive(Debug, Default, Clone)]
 pub struct VM {
     // Each page of memory is 64 KiB = 65536 in size.
+    // memory_size is an index of the end of mem
     pub memory_size: u32,
 
     pub offset: u32,
+    pub init_offset: u32,
 }
 
 impl VM {
@@ -28,22 +30,19 @@ impl VM {
     }
 
     pub fn get_memory_size(&self) -> u32 {
-        self.memory_size - self.offset
+        self.memory_size - self.init_offset
     }
 
     pub fn mem_store(&mut self, offset: u32, data_length: u32) -> Result<(), &'static [u8]> {
         // TODO: mock offset to prevent randomly allocating.
-        let offset = if self.offset>0 {
-            self.memory_size
-        } else {
-            offset
-        };
+        let offset = if self.offset > 0 { self.offset } else { offset };
 
         if data_length == 0 {
             return Ok(());
         }
 
         if self.memory_size == 0 {
+            self.init_offset = offset;
             self.offset = offset;
             self.memory_size = offset;
         }
@@ -56,6 +55,8 @@ impl VM {
         if requested_end > self.memory_size {
             panic!("is requested end too large");
         }
+
+        self.offset += data_length;
 
         Ok(())
     }
